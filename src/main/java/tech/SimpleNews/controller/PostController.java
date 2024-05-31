@@ -8,19 +8,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tech.SimpleNews.dto.request.AddPostDto;
+import tech.SimpleNews.dto.request.UserLocaDto;
+import tech.SimpleNews.dto.response.ResAddPostDto;
 import tech.SimpleNews.dto.response.ResPostDto;
 import tech.SimpleNews.dto.response.ResPostListDto;
 import tech.SimpleNews.service.PostService;
+import tech.SimpleNews.util.NaverApiUtils;
 
 @Tag(name = "Post", description = "메인 페이지 관련 API 입니다.")
 @CrossOrigin
 @RestController
-@RequestMapping("/api/{userId}/post")
+@RequestMapping("/api/post")
 @RequiredArgsConstructor
 public class PostController {
 
@@ -33,9 +37,9 @@ public class PostController {
         responseCode = "200", description = "게시물 정상 등록"
     )
     @PostMapping
-    public ResponseEntity<?> addPost(@PathVariable("userId") Long userId, AddPostDto addPostDto){
-        postService.add(userId,addPostDto);
-        return ResponseEntity.ok().body(null);
+    public ResponseEntity<ResAddPostDto> addPost(@RequestParam("userId") Long userId, @RequestBody AddPostDto addPostDto){
+        ResAddPostDto resAddPostDto = postService.add(userId, addPostDto);
+        return ResponseEntity.ok().body(resAddPostDto);
     }
 
     @Operation(
@@ -45,9 +49,9 @@ public class PostController {
         responseCode = "200", description = "게시글 리스트 정상 반환"
     )
     @GetMapping
-    public ResponseEntity<ResPostListDto> allPostNearByUser(@PathVariable("userId") Long userId){
-
-        return ResponseEntity.ok().body(new ResPostListDto());
+    public ResponseEntity<ResPostListDto> allPostNearByUser(@RequestParam("userId") Long userId,@RequestBody UserLocaDto userLocaDto){
+        ResPostListDto resPostListDto = postService.allPostNearByUser(userId, userLocaDto);
+        return ResponseEntity.ok().body(resPostListDto);
     }
 
     @Operation(
@@ -56,9 +60,10 @@ public class PostController {
     @ApiResponse(
         responseCode = "200", description = "게시글 상세 정보 정상 반환"
     )
-    @GetMapping("/{postId}")
-    public ResponseEntity<ResPostDto> detailPost(@PathVariable("userId") Long userId, @PathVariable("postId") Long postId){
-        return ResponseEntity.ok().body(new ResPostDto());
+    @GetMapping("/detail")
+    public ResponseEntity<ResPostDto> detailPost(@RequestParam("userId") Long userId, @RequestParam("postId") Long postId){
+        ResPostDto resPostDto = postService.detailPost(userId, postId);
+        return ResponseEntity.ok().body(resPostDto);
     }
 
 
@@ -68,21 +73,21 @@ public class PostController {
     @ApiResponse(
         responseCode = "200", description = "게시글 정상 삭제 완료"
     )
-    @DeleteMapping("/{postId}")
-    public ResponseEntity<?> deletePost(@PathVariable("userId") Long userId, @PathVariable("postId") Long postId){
-
+    @DeleteMapping("/detail")
+    public ResponseEntity<?> deletePost(@RequestParam("userId") Long userId, @RequestParam("postId") Long postId){
+        postService.deletePost(userId,postId);
         return ResponseEntity.ok().body(null);
     }
 
     @Operation(
-        summary = "게시글 상태 변경", description = "게시글 작성자가 게시글의 상태를 변경한다 \n PENDING(미요청) \n IN_PROGRESS(요청진행중) \n COMPLETED(요청완료)"
+        summary = "요청 등록", description = "유저가 타인이 올려놓은 문의 게시글에 요청을 보낸다."
     )
     @ApiResponse(
-        responseCode = "200", description = "게시글 상세 정보 정상 반환"
+        responseCode = "200", description = "유저의 게시글 정상 요청"
     )
-    @PostMapping("/{postId}/apply")
-    public ResponseEntity<?> applyPost(@PathVariable("userId") Long userId, @PathVariable("postId") Long postId){
-
+    @PostMapping("/detail/apply")
+    public ResponseEntity<?> applyPost(@RequestParam("userId") Long userId, @RequestParam("postId") Long postId){
+        postService.applyPost(userId,postId);
         return ResponseEntity.ok().body(null);
     }
 }

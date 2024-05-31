@@ -1,6 +1,9 @@
 spring:
   application:
     name: 'SimpleNews'
+  naver:
+    client_id: '16n344um8a'
+    sercet_key: 'kybHVzMTVf74NWvpHDxjF3zLVLuj7AH7vQCEEhH1'
 
   datasource:
     url: jdbc:mysql://localhost:3306/SimpleNews

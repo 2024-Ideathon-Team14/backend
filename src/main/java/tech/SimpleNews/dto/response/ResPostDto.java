@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import tech.SimpleNews.constant.Status;
+import tech.SimpleNews.domain.Post;
 
 @Getter
 @AllArgsConstructor
@@ -26,4 +27,15 @@ public class ResPostDto {
 
     @Enumerated(value = EnumType.STRING)
     private Status status;
+
+    public ResPostDto(Post post) {
+        this.nickname = post.getUser().getNickname();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.category = post.getCategory().getName();
+        this.createdAt = post.getCreatedAt();
+        this.requestAt = post.getRequestAt();
+        this.address = post.getAddress();
+        this.status = post.getStatus();
+    }
 }

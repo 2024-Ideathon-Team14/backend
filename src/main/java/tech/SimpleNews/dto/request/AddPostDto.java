@@ -17,8 +17,8 @@ public class AddPostDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime requestAt;
 
-    private double locationX;
-    private double locationY;
+    private double longitude;
+    private double latitude;
 
     private String category;
 }

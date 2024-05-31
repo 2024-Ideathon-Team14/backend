@@ -1,4 +1,4 @@
-package tech.SimpleNews.dto.request;
+package tech.SimpleNews.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostUserDto {
-    private double locationX;
-    private double locationY;
+public class ResAddPostDto {
+
+    private Long postId;
 }

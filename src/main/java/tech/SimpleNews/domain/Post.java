@@ -53,11 +53,11 @@ public class Post {
     @Column(name = "request_at", nullable = false)
     private LocalDateTime requestAt;
 
-    @Column(name = "location_x")
-    private double locationX;
+    @Column(name = "longitude")
+    private double longitude;
 
-    @Column(name = "location_y")
-    private double locationY;
+    @Column(name = "latitude")
+    private double latitude;
 
     private String address;
 
